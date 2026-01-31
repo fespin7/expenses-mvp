@@ -1,7 +1,4 @@
-export type Expense = {
-  id: number;
-  category: string;
-  title: string;
-  amount: number;
-  date: Date;
-};
+import type { BaseEntity } from "./BaseEntity";
+import type { ExpenseInput } from "./ExpenseInput";
+
+export type Expense = BaseEntity & ExpenseInput;

@@ -5,27 +5,38 @@ import {
   categoryRules,
   titleRules,
 } from "./validation/expense.validation";
+import FormError from "./FormError";
+import { useEffect } from "react";
 
 interface ExpenseFormRHFProps {
-  onAddExpense: (expenseInput: ExpenseInput) => void;
+  onSubmitExpense: (expenseInput: ExpenseInput) => void;
+  defaultValues?: ExpenseInput | null;
 }
 
-const errorStyle = { color: "red", marginTop: "0", marginBottom: "0" };
-
-export default function ExpenseFormRHF({ onAddExpense }: ExpenseFormRHFProps) {
+export default function ExpenseFormRHF({
+  onSubmitExpense,
+  defaultValues,
+}: ExpenseFormRHFProps) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<ExpenseInput>({
-    defaultValues: { category: "", title: "", amount: 0 },
+    defaultValues: defaultValues ?? { category: "", title: "", amount: 0 },
   });
 
+  useEffect(() => {
+    console.log("Resetting form with defaultValues:", defaultValues);
+    reset(defaultValues ?? { category: "", title: "", amount: 0 });
+  }, [defaultValues, reset]);
+
   const onSubmit = (data: ExpenseInput) => {
-    onAddExpense({ ...data, amount: Number(data.amount) });
+    onSubmitExpense({ ...data, amount: Number(data.amount) });
     reset();
   };
+
+  console.log("Rendering ExpenseFormRHF with defaultValues:", defaultValues);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -35,14 +46,14 @@ export default function ExpenseFormRHF({ onAddExpense }: ExpenseFormRHFProps) {
           placeholder="Category"
           {...register("category", categoryRules)}
         />
-        {errors.category && <p style={errorStyle}>{errors.category.message}</p>}
+        {errors.category && <FormError message={errors.category.message} />}
         <br />
         <input
           type="text"
           placeholder="Title"
           {...register("title", titleRules)}
         />
-        {errors.title && <p style={errorStyle}>{errors.title.message}</p>}
+        {errors.title && <FormError message={errors.title.message} />}
         <br />
         <input
           type="number"
@@ -50,10 +61,12 @@ export default function ExpenseFormRHF({ onAddExpense }: ExpenseFormRHFProps) {
           step="0.01"
           {...register("amount", amountRules)}
         />
-        {errors.amount && <p style={errorStyle}>{errors.amount.message}</p>}
+        {errors.amount && <FormError message={errors.amount.message} />}
         <br />
         <br />
-        <button type="submit">Add Expense</button>
+        <button type="submit">
+          {defaultValues ? "Update Expense" : "Add Expense"}
+        </button>
       </div>
     </form>
   );

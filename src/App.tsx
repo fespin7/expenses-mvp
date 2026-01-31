@@ -8,19 +8,51 @@ import ExpenseFormRHF from "./ExpenseFormRHF";
 
 function App() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
 
-  function addExpense(input: ExpenseInput) {
+  function addOrEditExpense(input: ExpenseInput) {
     if (!input.category || !input.title || input.amount <= 0) {
       // alert("Please fill in all fields correctly.");
       return;
     }
 
-    const newExpense: Expense = {
-      id: Date.now(),
-      date: new Date(),
-      ...input,
-    };
-    setExpenses([...expenses, newExpense]);
+    if (editingExpense) {
+      const updatedExpense: Expense = {
+        ...editingExpense,
+        ...input,
+        dateUpdated: new Date(),
+      };
+      setExpenses(
+        expenses.map((exp) =>
+          exp.id === editingExpense.id ? updatedExpense : exp,
+        ),
+      );
+      setEditingExpense(null);
+    } else {
+      const newExpense: Expense = {
+        id: Date.now(),
+        dateCreated: new Date(),
+        dateUpdated: new Date(),
+        ...input,
+      };
+      setExpenses([...expenses, newExpense]);
+    }
+  }
+
+  function editExpense(updatedExpense: Expense) {
+    console.log("Editing expense:", updatedExpense);
+    setEditingExpense(updatedExpense);
+  }
+
+  function getExpenseInput(
+    edittingExpense: Expense | null,
+  ): ExpenseInput | null {
+    if (!edittingExpense) return null;
+    return {
+      title: edittingExpense.title,
+      amount: edittingExpense.amount,
+      category: edittingExpense.category,
+    } as ExpenseInput;
   }
 
   return (
@@ -28,9 +60,12 @@ function App() {
       <div style={{ padding: "1rem", maxWidth: 400 }}>
         <h1>Expense Tracker</h1>
         {/* <ExpenseForm onAddExpense={addExpense} /> */}
-        <ExpenseFormRHF onAddExpense={addExpense} />
+        <ExpenseFormRHF
+          onSubmitExpense={addOrEditExpense}
+          defaultValues={getExpenseInput(editingExpense)}
+        />
         <hr />
-        <ExpensesList expenses={expenses} />
+        <ExpensesList expenses={expenses} onEditExpense={editExpense} />
         <ExpensesSummary expenses={expenses} />
       </div>
     </>
