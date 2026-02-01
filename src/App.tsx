@@ -27,7 +27,7 @@ function App() {
           exp.id === editingExpense.id ? updatedExpense : exp,
         ),
       );
-      setEditingExpense(null);
+      setEditingExpense(updatedExpense);
     } else {
       const newExpense: Expense = {
         id: Date.now(),
@@ -39,9 +39,12 @@ function App() {
     }
   }
 
-  function editExpense(updatedExpense: Expense) {
-    console.log("Editing expense:", updatedExpense);
-    setEditingExpense(updatedExpense);
+  function editExpense(expenseToEdit: Expense) {
+    setEditingExpense(expenseToEdit);
+  }
+
+  function cancelEdit() {
+    setEditingExpense(null);
   }
 
   function getExpenseInput(
@@ -63,6 +66,7 @@ function App() {
         <ExpenseFormRHF
           onSubmitExpense={addOrEditExpense}
           defaultValues={getExpenseInput(editingExpense)}
+          onCancelEdit={cancelEdit}
         />
         <hr />
         <ExpensesList expenses={expenses} onEditExpense={editExpense} />

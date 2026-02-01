@@ -11,11 +11,13 @@ import { useEffect } from "react";
 interface ExpenseFormRHFProps {
   onSubmitExpense: (expenseInput: ExpenseInput) => void;
   defaultValues?: ExpenseInput | null;
+  onCancelEdit?: () => void;
 }
 
 export default function ExpenseFormRHF({
   onSubmitExpense,
   defaultValues,
+  onCancelEdit = () => {},
 }: ExpenseFormRHFProps) {
   const {
     register,
@@ -27,16 +29,15 @@ export default function ExpenseFormRHF({
   });
 
   useEffect(() => {
-    console.log("Resetting form with defaultValues:", defaultValues);
     reset(defaultValues ?? { category: "", title: "", amount: 0 });
   }, [defaultValues, reset]);
 
   const onSubmit = (data: ExpenseInput) => {
-    onSubmitExpense({ ...data, amount: Number(data.amount) });
-    reset();
+    onSubmitExpense(data);
+    if (!defaultValues) {
+      reset();
+    }
   };
-
-  console.log("Rendering ExpenseFormRHF with defaultValues:", defaultValues);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -67,6 +68,11 @@ export default function ExpenseFormRHF({
         <button type="submit">
           {defaultValues ? "Update Expense" : "Add Expense"}
         </button>
+        {defaultValues && (
+          <button type="button" onClick={() => onCancelEdit()}>
+            Cancel
+          </button>
+        )}
       </div>
     </form>
   );

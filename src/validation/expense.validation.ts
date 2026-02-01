@@ -9,6 +9,7 @@ export const titleRules = {
 };
 
 export const amountRules = {
+  valueAsNumber: true,
   required: "Amount is required.",
   min: { value: 0.01, message: "Amount must be greater than 0." },
 };
