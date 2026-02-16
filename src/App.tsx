@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { Expense } from "./models/Expense";
 import ExpensesList from "./ExpensesList";
-// import ExpenseForm from "./ExpenseForm";
 import ExpensesSummary from "./ExpensesSummary";
 import type { ExpenseInput } from "./models/ExpenseInput";
-import ExpenseFormRHF from "./ExpenseFormRHF";
+// import ExpenseForm from "./ExpenseForm";
+// import ExpenseFormRHF from "./ExpenseFormRHF";
+import ExpenseFormYup from "./ExpenseFormYup";
 
 function App() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -63,7 +64,7 @@ function App() {
       <div style={{ padding: "1rem", maxWidth: 400 }}>
         <h1>Expense Tracker</h1>
         {/* <ExpenseForm onAddExpense={addExpense} /> */}
-        <ExpenseFormRHF
+        <ExpenseFormYup
           onSubmitExpense={addOrEditExpense}
           defaultValues={getExpenseInput(editingExpense)}
           onCancelEdit={cancelEdit}
