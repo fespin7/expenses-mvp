@@ -24,10 +24,19 @@ export default function ExpenseFormYup({
     formState: { errors },
   } = useForm<ExpenseInput>({
     resolver: yupResolver(expenseSchema),
+    defaultValues: {
+      title: "",
+      amount: 0,
+      //NO category
+    },
   });
 
   useEffect(() => {
-    reset(defaultValues ?? { category: "", title: "", amount: 0 });
+    if (defaultValues) {
+      reset(defaultValues);
+    } else {
+      reset();
+    }
   }, [defaultValues, reset]);
 
   const onSubmit = (data: ExpenseInput) => {

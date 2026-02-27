@@ -1,7 +1,4 @@
-import type { Category } from "../constants/categories";
+import * as yup from "yup";
+import type { expenseSchema } from "../validation/expense.schema";
 
-export type ExpenseInput = {
-  category: Category | "";
-  title: string;
-  amount: number;
-};
+export type ExpenseInput = yup.InferType<typeof expenseSchema>;

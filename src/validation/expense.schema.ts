@@ -8,8 +8,8 @@ export const expenseSchema = yup.object({
     .min(3, "Title must be at least 3 characters long")
     .max(100, "Title must be at most 100 characters long"),
   category: yup
-    .mixed<Category | "">()
-    .oneOf([...CATEGORIES, ""], "Category must be one of the items in the list")
+    .mixed<Category>()
+    .oneOf(CATEGORIES, "Category must be one of the items in the list")
     .required("Category is required"),
   amount: yup
     .number()
