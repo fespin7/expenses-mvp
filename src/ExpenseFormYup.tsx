@@ -4,6 +4,7 @@ import FormError from "./FormError";
 import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { expenseSchema } from "./validation/expense.schema";
+import { CATEGORIES } from "./constants/categories";
 
 interface ExpenseFormYupProps {
   onSubmitExpense: (expenseInput: ExpenseInput) => void;
@@ -39,7 +40,14 @@ export default function ExpenseFormYup({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <input type="text" placeholder="Category" {...register("category")} />
+        <select {...register("category")}>
+          <option value="">Select Category</option>
+          {CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
         {errors.category && <FormError message={errors.category.message} />}
         <br />
         <input type="text" placeholder="Title" {...register("title")} />
