@@ -1,4 +1,8 @@
-import * as yup from "yup";
-import type { expenseSchema } from "../validation/expense.schema";
+// import * as yup from "yup";
+// import type { expenseSchema } from "../validation/expense.schema";
 
-export type ExpenseInput = yup.InferType<typeof expenseSchema>;
+export type ExpenseInput = {
+  title: string;
+  categoryId: number;
+  amount: number;
+};

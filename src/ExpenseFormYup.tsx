@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import type { ExpenseInput } from "./models/ExpenseInput";
+import type { Category } from "./models/Category";
 import FormError from "./FormError";
 import { useEffect } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,9 +9,18 @@ import { CATEGORIES } from "./constants/categories";
 
 interface ExpenseFormYupProps {
   onSubmitExpense: (expenseInput: ExpenseInput) => void;
-  defaultValues?: ExpenseInput | null;
+  defaultValues?: ExpenseInput;
   onCancelEdit?: () => void;
 }
+
+const getCategories = (): Category[] => {
+  return CATEGORIES.map((cat, index) => ({
+    id: index + 1,
+    name: cat,
+    dateCreated: new Date(),
+    dateUpdated: new Date(),
+  }));
+};
 
 export default function ExpenseFormYup({
   onSubmitExpense,
@@ -27,7 +37,7 @@ export default function ExpenseFormYup({
     defaultValues: {
       title: "",
       amount: 0,
-      //NO category
+      categoryId: 0,
     },
   });
 
@@ -35,7 +45,7 @@ export default function ExpenseFormYup({
     if (defaultValues) {
       reset(defaultValues);
     } else {
-      reset();
+      reset({ title: "", amount: 0, categoryId: 0 }); // ← Pasa los valores iniciales explícitamente
     }
   }, [defaultValues, reset]);
 
@@ -49,15 +59,15 @@ export default function ExpenseFormYup({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <select {...register("category")}>
-          <option value="">Select Category</option>
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+        <select {...register("categoryId")}>
+          <option value="0">Select Category</option>
+          {getCategories().map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
             </option>
           ))}
         </select>
-        {errors.category && <FormError message={errors.category.message} />}
+        {errors.categoryId && <FormError message={errors.categoryId.message} />}
         <br />
         <input type="text" placeholder="Title" {...register("title")} />
         {errors.title && <FormError message={errors.title.message} />}

@@ -12,7 +12,7 @@ function App() {
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
 
   function addOrEditExpense(input: ExpenseInput) {
-    if (!input.category || !input.title || input.amount <= 0) {
+    if (input.categoryId === 0 || !input.title || input.amount <= 0) {
       // alert("Please fill in all fields correctly.");
       return;
     }
@@ -50,12 +50,12 @@ function App() {
 
   function getExpenseInput(
     edittingExpense: Expense | null,
-  ): ExpenseInput | null {
-    if (!edittingExpense) return null;
+  ): ExpenseInput | undefined {
+    if (!edittingExpense) return undefined;
     return {
       title: edittingExpense.title,
       amount: edittingExpense.amount,
-      category: edittingExpense.category,
+      categoryId: edittingExpense.categoryId,
     } as ExpenseInput;
   }
 

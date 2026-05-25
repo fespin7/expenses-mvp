@@ -15,7 +15,7 @@ export default function ExpensesList({
       <ul>
         {expenses.map((expense) => (
           <li key={expense.id}>
-            {expense.category} - {expense.title}: ${expense.amount} on{" "}
+            {expense.title}: ${expense.amount} on{" "}
             {expense.dateCreated.toLocaleDateString()} -{" "}
             <a href="#" onClick={() => onEditExpense(expense)}>
               Edit
