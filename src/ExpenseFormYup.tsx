@@ -22,6 +22,12 @@ const getCategories = (): Category[] => {
   }));
 };
 
+const emptyExpense: ExpenseInput = {
+  title: "",
+  amount: 0,
+  categoryId: 0,
+};
+
 export default function ExpenseFormYup({
   onSubmitExpense,
   defaultValues,
@@ -34,18 +40,14 @@ export default function ExpenseFormYup({
     formState: { errors },
   } = useForm<ExpenseInput>({
     resolver: yupResolver(expenseSchema),
-    defaultValues: {
-      title: "",
-      amount: 0,
-      categoryId: 0,
-    },
+    defaultValues: emptyExpense,
   });
 
   useEffect(() => {
     if (defaultValues) {
       reset(defaultValues);
     } else {
-      reset({ title: "", amount: 0, categoryId: 0 }); // ← Pasa los valores iniciales explícitamente
+      reset(emptyExpense); // ← Pasa los valores iniciales explícitamente
     }
   }, [defaultValues, reset]);
 
